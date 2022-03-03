@@ -106,8 +106,8 @@ export class LockComponent extends BaseLockComponent {
 
       if (userInitiated) {
         this.platformUtilsService.showDialog(
-          this.i18nService.t(error.title),
           this.i18nService.t(error.description),
+          this.i18nService.t(error.title),
           this.i18nService.t("ok"),
           null,
           "error"

@@ -274,8 +274,8 @@ export class SettingsComponent implements OnInit {
             const error = BiometricErrors[e as BiometricErrorTypes];
 
             this.platformUtilsService.showDialog(
-              this.i18nService.t(error.title),
               this.i18nService.t(error.description),
+              this.i18nService.t(error.title),
               this.i18nService.t("ok"),
               null,
               "error"

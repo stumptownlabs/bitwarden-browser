@@ -71,5 +71,9 @@
       <button type="button" appStopClick (click)="logOut()">{{ "logOut" | i18n }}</button>
     </p>
     <app-private-mode-warning></app-private-mode-warning>
+    <p class="text-center text-danger" *ngIf="biometricError">{{ biometricError }}</p>
+    <p class="text-center text-muted" *ngIf="pendingBiometric">
+      <i class="bwi bwi-spinner bwi-spin" aria-hidden="true"></i> {{ "awaitDesktop" | i18n }}
+    </p>
   </content>
 </form>

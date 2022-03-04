@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
-import Swal from "sweetalert2/src/sweetalert2.js";
+import Swal from "sweetalert2";
 
 import { ModalService } from "jslib-angular/services/modal.service";
 import { CryptoService } from "jslib-common/abstractions/crypto.service";

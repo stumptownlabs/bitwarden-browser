@@ -1,6 +1,5 @@
 import { Component, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
-import Swal from "sweetalert2";
 
 import { LockComponent as BaseLockComponent } from "jslib-angular/components/lock.component";
 import { ApiService } from "jslib-common/abstractions/api.service";
@@ -67,32 +66,19 @@ export class LockComponent extends BaseLockComponent {
       document.getElementById(this.pinLock ? "pin" : "masterPassword").focus();
       if (this.biometricLock && !disableAutoBiometricsPrompt && this.isInitialLockScreen) {
         if (await this.vaultTimeoutService.isLocked()) {
-          await this.unlockBiometric(false);
+          await this.unlockBiometric();
         }
       }
     }, 100);
   }
 
-  async unlockBiometric(userInitiated = true): Promise<boolean> {
+  async unlockBiometric(): Promise<boolean> {
     if (!this.biometricLock) {
       return;
     }
 
-    const div = document.createElement("div");
-    div.innerHTML = `<div class="swal2-text">${this.i18nService.t("awaitDesktop")}</div>`;
-
-    if (userInitiated) {
-      Swal.fire({
-        heightAuto: false,
-        buttonsStyling: false,
-        html: div,
-        showCancelButton: true,
-        cancelButtonText: this.i18nService.t("cancel"),
-        showConfirmButton: false,
-      });
-    } else {
-      this.pendingBiometric = true;
-    }
+    this.pendingBiometric = true;
+    this.biometricError = null;
 
     let success;
     try {
@@ -104,24 +90,9 @@ export class LockComponent extends BaseLockComponent {
         this.logService.error("Unknown error: " + e);
       }
 
-      if (userInitiated) {
-        this.platformUtilsService.showDialog(
-          this.i18nService.t(error.description),
-          this.i18nService.t(error.title),
-          this.i18nService.t("ok"),
-          null,
-          "error"
-        );
-      } else {
-        this.biometricError = this.i18nService.t(error.description);
-      }
+      this.biometricError = this.i18nService.t(error.description);
     }
     this.pendingBiometric = false;
-
-    // Avoid closing the error dialogs
-    if (success && userInitiated) {
-      Swal.close();
-    }
 
     return success;
   }
